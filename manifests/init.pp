@@ -16,7 +16,8 @@ class nginx {
         '/etc/nginx':
             ensure => directory;
         '/etc/nginx/nginx.conf':
-            content => template('nginx/nginx.conf.erb');
+            content => template('nginx/nginx.conf.erb'),
+            notify  => Service['nginx'];
         '/etc/nginx/conf.d':
             ensure => directory;
         '/etc/nginx/sites-available':
@@ -24,13 +25,13 @@ class nginx {
         '/etc/nginx/sites-enabled':
             ensure => directory;
         '/etc/nginx/fastcgi_params':
-            source => 'puppet:///modules/nginx/fastcgi_params'
+            source => 'puppet:///modules/nginx/fastcgi_params';
         '/etc/nginx/scgi_params':
-            source => 'puppet:///modules/nginx/scgi_params'
+            source => 'puppet:///modules/nginx/scgi_params';
         '/etc/nginx/uwsgi_params':
-            source => 'puppet:///modules/nginx/uwsgi_params'
+            source => 'puppet:///modules/nginx/uwsgi_params';
         '/etc/nginx/mime.types':
-            source => 'puppet:///modules/nginx/mime.types'
+            source => 'puppet:///modules/nginx/mime.types';
     }
 
     service {
