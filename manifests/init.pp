@@ -4,7 +4,15 @@ class nginx {
 
     package {
         'nginx':
-            ensure => installed;
+            ensure => installed,
+            notify => Exec['nginx::upgrade'];
+    }
+
+    if ! defined(Package['logrotate']) {
+        package {
+            'logrotate':
+                ensure => installed;
+        }
     }
 
     File {
@@ -14,12 +22,14 @@ class nginx {
 
     file {
         '/etc/nginx':
-            ensure => directory;
+            ensure  => directory;
         '/etc/nginx/nginx.conf':
             content => template('nginx/nginx.conf.erb'),
-            notify  => Service['nginx'];
+            notify  => Exec['nginx::reload'];
         '/etc/nginx/conf.d':
-            ensure => directory;
+            ensure  => directory,
+            recurse => true,
+            purge   => true;
         '/etc/nginx/sites-available':
             ensure => directory;
         '/etc/nginx/sites-enabled':
@@ -32,13 +42,28 @@ class nginx {
             source => 'puppet:///modules/nginx/uwsgi_params';
         '/etc/nginx/mime.types':
             source => 'puppet:///modules/nginx/mime.types';
+        '/etc/logrotate.d/nginx':
+            content => template('nginx/logrotate.conf.erb'),
+            require => Package['logrotate'];
     }
 
     service {
         'nginx':
             ensure  => running,
             enable  => true,
-            require => Package['nginx'];
+            require => [
+                Package['nginx'],
+                File['/etc/nginx/nginx.conf'],
+            ]
+    }
+
+    exec {
+        'nginx::reload':
+            command     => $nginx::params::reload_cmd,
+            refreshonly => true;
+        'nginx::upgrade':
+            command     => $nginx::params::upgrade_cmd,
+            refreshonly => true;
     }
 }
 
