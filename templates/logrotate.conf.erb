@@ -1,0 +1,13 @@
+/var/log/nginx/*log {
+    daily
+    missingok
+    rotate 12
+    compress
+    delaycompress
+    notifempty
+    create 0640 <%= scope.lookupvar('nginx::params::run_as_user') -%> <%= scope.lookupvar('nginx::params::run_as_group') %>
+    sharedscripts
+    postrotate
+        [ -f /var/run/nginx.pid ] && kill -USR1 `cat /var/run/nginx.pid`
+    endscript
+}
