@@ -1,7 +1,7 @@
 # -*- mode: puppet; sh-basic-offset: 4; indent-tabs-mode: nil; coding: utf-8 -*-
 # vim: tabstop=4 softtabstop=4 expandtab shiftwidth=4 fileencoding=utf-8
 
-define nginx::config($config='', $content='', $source='', $order='500', $ensure='present') {
+define nginx::config($content='', $source='', $order='500', $ensure='present') {
 
     if (($content and $source) or (!$content and !$source)){
         err('Must define "content" or "source" for nginx::config!')
@@ -21,10 +21,7 @@ define nginx::config($config='', $content='', $source='', $order='500', $ensure=
         }
     }
 
-    $config_name = $config ? {
-        ''      => $name,
-        default => $config,
-    }
+    $config_name = $name
 
     File {
         require => File['/etc/nginx/conf.d'],
