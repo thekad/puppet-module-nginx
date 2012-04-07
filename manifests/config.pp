@@ -3,9 +3,11 @@
 
 define nginx::config($content='', $source='', $order='500', $ensure='present') {
 
-    if (($content and $source) or (!$content and !$source)){
-        err('Must define "content" or "source" for nginx::config!')
-        fail('Must define "content" or "source" for nginx::config!')
+    if $ensure == 'present' {
+        if (($content and $source) or (!$content and !$source)){
+            err('Must define "content" or "source" for nginx::config!')
+            fail('Must define "content" or "source" for nginx::config!')
+        }
     }
 
     case $ensure {
@@ -13,7 +15,7 @@ define nginx::config($content='', $source='', $order='500', $ensure='present') {
             $ensure_real = 'present'
         }
         'absent', 'purged': {
-            $ensure_real = 'purged'
+            $ensure_real = 'absent'
         }
         default: {
             err("Invalid value for 'ensure' (valid values: present, purged, absent): $ensure")
