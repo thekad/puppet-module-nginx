@@ -23,7 +23,7 @@ class nginx {
 
     package {
         'nginx':
-            ensure  => installed,
+            ensure  => $nginx::params::install_version,
             notify  => Exec['nginx::upgrade'],
             require => User[$nginx::params::run_as_user];
     }

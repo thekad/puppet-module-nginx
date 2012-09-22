@@ -3,6 +3,12 @@
 
 class nginx::params {
 
+#   If you wish to install a specific version, define it at the node level
+    $install_version = $node_install_version ? {
+        ''      => installed,
+        default => $node_install_version,
+    }
+
     case $operatingsystem {
         'ubuntu', 'debian': {
             $run_as_user = 'www-data'
