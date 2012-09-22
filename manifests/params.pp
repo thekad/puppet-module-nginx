@@ -13,7 +13,7 @@ class nginx::params {
         'ubuntu', 'debian': {
             $run_as_user = 'www-data'
             $run_as_group = 'adm'
-            $reload_cmd = '/usr/sbin/service nginx reload'
+            $reload_cmd = 'service nginx reload'
 #           Ubuntu doesn't support upgrade in place
             $upgrade_cmd = '/bin/false'
             $default_root_dir = '/usr/share/nginx/www'
@@ -21,8 +21,8 @@ class nginx::params {
         'redhat', 'centos', 'fedora': {
             $run_as_user = 'nginx'
             $run_as_group = 'root'
-            $reload_cmd = '/sbin/service nginx reload'
-            $upgrade_cmd = '/sbin/service nginx upgrade'
+            $reload_cmd = 'service nginx reload'
+            $upgrade_cmd = 'service nginx upgrade'
             $default_root_dir = '/usr/share/nginx/html'
         }
     }
