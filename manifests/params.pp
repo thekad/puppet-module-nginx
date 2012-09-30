@@ -4,9 +4,9 @@
 class nginx::params {
 
 #   If you wish to install a specific version, define it at the node level
-    $install_version = $node_install_version ? {
+    $install_version = $node_nginx_install_version ? {
         ''      => installed,
-        default => $node_install_version,
+        default => $node_nginx_install_version,
     }
 
     case $operatingsystem {
